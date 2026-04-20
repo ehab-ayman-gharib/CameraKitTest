@@ -16,6 +16,10 @@ export const CameraKitWrapper = () => {
     const [isSessionReady, setIsSessionReady] = useState(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [currentLensId, setCurrentLensId] = useState<string>(CAMERAKIT_CONFIG.DEFAULT_LENS_ID);
+    const [modelID, setModelID] = useState<string>(() => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('modelID') || '';
+    });
     const [showFlash, setShowFlash] = useState(false);
     const [isUsingCamera, setIsUsingCamera] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
@@ -360,8 +364,12 @@ export const CameraKitWrapper = () => {
 
                 if (!isMounted) return;
 
-                console.log('Applying lens:', currentLensId);
-                await sessionRef.current.applyLens(lens);
+                console.log('Applying lens:', currentLensId, 'with modelID:', modelID);
+                await sessionRef.current.applyLens(lens, {
+                    launchParams: {
+                        modelID: modelID
+                    }
+                });
                 console.log('Lens applied successfully:', currentLensId);
 
                 // Hide loader after lens is applied
@@ -381,7 +389,7 @@ export const CameraKitWrapper = () => {
         return () => {
             isMounted = false;
         };
-    }, [currentLensId, isSessionReady]);
+    }, [currentLensId, isSessionReady, modelID]);
     // Error Handling 
     if (error) {
         return (
