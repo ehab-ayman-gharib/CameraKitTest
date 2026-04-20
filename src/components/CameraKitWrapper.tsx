@@ -16,9 +16,10 @@ export const CameraKitWrapper = () => {
     const [isSessionReady, setIsSessionReady] = useState(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [currentLensId, setCurrentLensId] = useState<string>(CAMERAKIT_CONFIG.DEFAULT_LENS_ID);
+    //@ts-ignore
     const [modelID, setModelID] = useState<string>(() => {
         const params = new URLSearchParams(window.location.search);
-        return params.get('modelID') || '';
+        return params.get('modelID') || '30b2b7a69c';
     });
     const [showFlash, setShowFlash] = useState(false);
     const [isUsingCamera, setIsUsingCamera] = useState(true);
